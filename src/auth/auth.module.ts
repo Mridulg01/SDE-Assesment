@@ -7,7 +7,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 
 export const jwtConstants = {
-  secret: 'super-secret-key-for-assessment', // In a real app, this should be in an environment variable
+  secret: process.env.JWT_SECRET || 'super-secret-key-for-assessment', // In a real app, this should be in an environment variable
 };
 
 @Module({
@@ -15,7 +15,7 @@ export const jwtConstants = {
     UsersModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
-      secret: jwtConstants.secret,
+      secret: process.env.JWT_SECRET || jwtConstants.secret,
       signOptions: { expiresIn: '1h' },
     }),
   ],

@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import { Task } from '../../tasks/entities/task.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity('users')
 export class User {
@@ -9,6 +10,7 @@ export class User {
   @Column({ unique: true })
   username: string;
 
+  @Exclude()
   @Column()
   passwordHash: string;
 
