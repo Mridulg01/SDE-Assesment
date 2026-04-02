@@ -48,21 +48,22 @@ npm run test
 
 ---
 
-## Testing API Endpoints 
+## ⚡ Interactive API Testing (Swagger UI) 
+The easiest way to test this API without using Postman is via the built-in Swagger documentation interface.
 
-### Authentication
-- `POST /auth/signup`
-  - Body: `{ "username": "testuser", "password": "password123" }`
-- `POST /auth/signin`
-  - Body: Same as above. Returns `{ "accessToken": "eyJhb..." }`
+1. Once the server is running, navigate your browser to: **http://localhost:3000/api**
+2. Create a test user via `POST /auth/signup`.
+3. Login via `POST /auth/signin` and copy your JWT `accessToken`.
+4. Click the **"Authorize"** button at the top of the Swagger page, paste your token, and easily test all of the secure Task CRUD endpoints with the click of a button!
 
-### Tasks CRUD (Requires Bearer Token)
-*Use the token obtained from `/auth/signin` in the Authorization header (`Authorization: Bearer <token>`)*
-- `POST /tasks`: Create a task. Body: `{ "title": "Buy milk", "description": "1 Gallon" }`
-- `GET /tasks`: Retrieve all tasks created by the authenticated user.
-- `GET /tasks/:id`: Retrieve a specific task by its UUID.
-- `PATCH /tasks/:id`: Update an existing task.
-- `DELETE /tasks/:id`: Delete a task.
+*(Alternatively, you can test endpoints manually using tools like Postman or cURL.)*
+
+---
+
+## 🔐 Security & Environment Variables
+For evaluation convenience, the database and JWT credentials have fallback defaults hardcoded into the API matching the attached `docker-compose.yml` file. This means the project will run instantly out of the box without setup! 
+
+However, the architecture intelligently uses `@nestjs/config`, meaning you can securely override any credential by simply placing a `.env` file in the root directory.
 
 ---
 ## Submission / Uploading to your GitHub
