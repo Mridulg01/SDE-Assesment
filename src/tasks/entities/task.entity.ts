@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
+import { TaskStatus } from '../task-status.enum';
 
 @Entity('tasks')
 export class Task {
@@ -11,6 +12,13 @@ export class Task {
 
   @Column({ nullable: true })
   description: string;
+
+  @Column({
+    type: 'enum',
+    enum: TaskStatus,
+    default: TaskStatus.OPEN,
+  })
+  status: TaskStatus;
 
   @Column({ default: false })
   isCompleted: boolean;

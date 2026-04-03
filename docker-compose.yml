@@ -4,14 +4,41 @@ services:
     image: postgres:15
     container_name: nest_backend_db
     environment:
-      POSTGRES_USER: nestuser
-      POSTGRES_PASSWORD: nestpassword
-      POSTGRES_DB: nestdb
+      POSTGRES_USER: ${DB_USERNAME:-nestuser}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-nestpassword}
+      POSTGRES_DB: ${DB_NAME:-nestdb}
     ports:
-      - "5433:5432"
+      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-nestuser} -d ${DB_NAME:-nestdb}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     restart: unless-stopped
+
+  app:
+    build:
+      context: .
+      target: development
+    container_name: nest_backend_app
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USERNAME: ${DB_USERNAME:-nestuser}
+      DB_PASSWORD: ${DB_PASSWORD:-nestpassword}
+      DB_NAME: ${DB_NAME:-nestdb}
+      NODE_ENV: development
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: always
 
 volumes:
   pgdata:
